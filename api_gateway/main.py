@@ -12,9 +12,17 @@ import httpx
 app = FastAPI()
 security = HTTPBearer()
 
-AUTH_SERVICE = "http://localhost:8001"
+import os
 
-USER_SERVICE = "http://localhost:8002"
+AUTH_SERVICE = os.getenv(
+    "AUTH_SERVICE",
+    "http://localhost:8001"
+)
+
+USER_SERVICE = os.getenv(
+    "USER_SERVICE",
+    "http://localhost:8002"
+)
 
 
 @app.post("/auth/login")

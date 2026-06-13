@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+
+  auth-service:
+    build:
+      context: ./auth_service
+    ports:
+      - "8001:8001"
+
+  user-service:
+    build:
+      context: ./user_service
+    ports:
+      - "8002:8002"
+
+  api-gateway:
+    build:
+      context: ./api_gateway
+    ports:
+      - "8080:8080"
+    environment:
+      AUTH_SERVICE: http://auth-service:8001
+      USER_SERVICE: http://user-service:8002
+    depends_on:
+      - auth-service
+      - user-service
