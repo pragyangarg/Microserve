@@ -11,6 +11,7 @@ RUN pip install fastapi \
     passlib[bcrypt] \
     bcrypt==4.0.1 \
     python-jose[cryptography] \
-    httpx
+    httpx \
+    logging
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]

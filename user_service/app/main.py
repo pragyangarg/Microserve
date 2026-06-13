@@ -7,6 +7,7 @@ from fastapi import Depends
 
 from app.cache import redis_client
 import json
+from app.logger import logger
 
 
 Base.metadata.create_all(
@@ -38,13 +39,17 @@ def me(
 
     if cached_user:
 
-        print("CACHE HIT")
+        logger.info(
+            f"CACHE HIT FOR USER {current_user}"
+        )
 
         return json.loads(
             cached_user
         )
 
-    print("CACHE MISS")
+        logger.info( 
+            f"CACHE MISS FOR USER {current_user}"
+        )
 
     user_data = {
         "username": current_user,

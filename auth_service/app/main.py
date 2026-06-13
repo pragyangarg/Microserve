@@ -23,6 +23,11 @@ from .jwt_handler import create_access_token
 
 from .auth import get_current_user
 
+from app.logger import logger
+
+
+
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -94,6 +99,8 @@ def login(
             detail="Invalid credentials"
         )
 
+
+# Track the login event in the analytics service if failed still logging works 
     try:
 
         response = httpx.post(
@@ -106,8 +113,17 @@ def login(
 
     except Exception as e:
 
-        print("Analytics Service Error:", e)
+        logger.error(
+            f"Analytics service unavailable: {e}"
+        )
+    
 
+    # Log the login event
+    logger.info(
+        f"User {db_user.username} logged in"
+    )
+
+    
     
     access_token = create_access_token(
         {

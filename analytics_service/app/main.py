@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+from app.logger import logger
+
 app = FastAPI()
 
 events = []
@@ -9,7 +11,9 @@ events = []
 def track_event(
     event: dict
 ):
-
+    logger.info(
+    f"EVENT RECORDED: {event}"
+    )
     events.append(event)
 
     return {
