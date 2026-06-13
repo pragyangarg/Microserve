@@ -8,6 +8,7 @@ RUN pip install fastapi \
     uvicorn \
     sqlalchemy \
     psycopg2-binary \
-    python-jose[cryptography]
+    python-jose[cryptography] \
+    redis
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8002"]

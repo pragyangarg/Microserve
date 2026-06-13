@@ -5,6 +5,10 @@ from app.models import Base
 from app.auth import get_current_user
 from fastapi import Depends
 
+from app.cache import redis_client
+import json
+
+
 Base.metadata.create_all(
     bind=engine
 )
@@ -28,7 +32,29 @@ def me(
     )
 ):
 
-    return {
+    cached_user = redis_client.get(
+        current_user
+    )
+
+    if cached_user:
+
+        print("CACHE HIT")
+
+        return json.loads(
+            cached_user
+        )
+
+    print("CACHE MISS")
+
+    user_data = {
         "username": current_user,
         "service": "user-service"
-    }   
+    }
+
+    redis_client.set(
+        current_user,
+        json.dumps(user_data),
+        ex=60
+    )
+
+    return user_data
