@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi import Depends
 from fastapi import HTTPException
 
+import httpx
+
 from sqlalchemy.orm import Session
 
 from .database import engine
@@ -92,6 +94,21 @@ def login(
             detail="Invalid credentials"
         )
 
+    try:
+
+        response = httpx.post(
+            "http://analytics-service:8003/track",
+            json={
+                "event": "login",
+                "user": db_user.username
+            }
+        )
+
+    except Exception as e:
+
+        print("Analytics Service Error:", e)
+
+    
     access_token = create_access_token(
         {
             "sub": db_user.username

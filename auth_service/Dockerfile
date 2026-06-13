@@ -10,6 +10,7 @@ RUN pip install fastapi \
     psycopg2-binary \
     passlib[bcrypt] \
     bcrypt==4.0.1 \
-    python-jose[cryptography]
+    python-jose[cryptography] \
+    httpx
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
